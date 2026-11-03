@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Backup Keeper">
+  <path d="M18 44a12 12 0 0 1 1-24 16 16 0 0 1 30 4 10 10 0 0 1-1 20H18z"/>
+  <path d="M32 40V26"/>
+  <path d="M26 32l6-6 6 6"/>
+</svg>

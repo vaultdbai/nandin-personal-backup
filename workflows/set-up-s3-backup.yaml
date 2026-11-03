@@ -1,0 +1,60 @@
+id: set-up-s3-backup
+name: Set up S3 backup
+description: Gets your folders backed up to your own S3 bucket on Glacier Deep Archive, from no AWS account to the first backup. Every AWS change waits for your approval.
+steps:
+  - id: check
+    agent: backup-keeper
+    input: >-
+      Setting up S3 backup. Call s3_backup__status. If the setup profile can't
+      sign in to AWS, offer to open the AWS sign-up page with
+      s3_backup__open_aws_signup (the user approves or declines it), and
+      explain what sign-up needs. Reply with what's already done and what the
+      user does next.
+  - id: sign-in
+    step_type: manual
+    instructions: >-
+      {{check.output}}
+
+
+      When you have an AWS account: sign in on this computer in Settings ›
+      Cloud credentials with a profile that may create S3 buckets and IAM
+      users. Then open Library › S3 Backup › Setup, put that profile in "AWS
+      profile" and your nearest region (like eu-west-1) in "AWS region", and
+      save. Mark this step done.
+    deadline_hours: 168
+  - id: bucket
+    agent: backup-keeper
+    input: >-
+      The user has signed in. Call s3_backup__status to confirm, then create
+      the backup bucket with s3_backup__create_backup_bucket, named
+      nandi-backup-<user's first name, lowercase>-<6 random lowercase letters
+      or digits>, in the region from Setup. Reply with only the bucket name and
+      region.
+    critical: true
+  - id: upload-user
+    agent: backup-keeper
+    input: >-
+      Create the upload-only user for the bucket in this answer with
+      s3_backup__create_upload_user: {{bucket.output}}. Reply with the user and
+      profile names, and one sentence on what the key can and can't do.
+    critical: true
+  - id: folders
+    step_type: manual
+    instructions: >-
+      Bucket: {{bucket.output}}
+
+      {{upload-user.output}}
+
+
+      Open Library › S3 Backup › Setup. Set "S3 bucket" (and the region) to
+      the ones above, add the folders to back up under "Folders to back up",
+      and save. Saving turns on a backup trigger for each folder and a nightly
+      backup. Mark this step done.
+    deadline_hours: 168
+  - id: first-backup
+    agent: backup-keeper
+    input: >-
+      Run the first backup with s3_backup__backup_all and report one line per
+      folder. Then say what it will cost per month at this size (Deep Archive
+      is about $0.00099 per GB a month) and that changes are now backed up
+      within 15 minutes, plus every night.

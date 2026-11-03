@@ -1,0 +1,7 @@
+id: personal-backup
+name: Nandi Personal Backup
+description: Backs up the folders you choose to your own Amazon S3 bucket on Glacier Deep Archive, as they change and every night. Backup Keeper sets up the AWS side with you.
+version: 0.1.1
+min_nandi_version: 0.1.0
+agents: [backup-keeper]
+workflows: [set-up-s3-backup]
